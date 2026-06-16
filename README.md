@@ -126,6 +126,39 @@ Roll back by shifting traffic:
 kn service update helloworld-go --traffic helloworld-go-00001=100
 ```
 
+**Cron Job Trigger**
+
+Run in this cron task to run every 2 minutes:
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello-cron
+  namespace: default
+spec:
+  schedule: "*/2 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: curl
+              image: curlimages/curl:latest
+              args:
+                - curl
+                - -H
+                - "Host: helloworld-go.default.127.0.0.1.sslip.io"
+                - http://kourier.kourier-system.svc.cluster.local
+          restartPolicy: OnFailure
+EOF
+```
+
+You have two options: a native Kubernetes CronJob, or a Knative PingSource. Since `helloworld-go` just responds to plain HTTP (it doesn't parse CloudEvents), It is a more correct to use a CronJob. PingSource is better suited to services built to receive CloudEvents, like `event-display`.
+
+Kubernetes CronJobs don't support sub-minute scheduling — 2 minutes is the minimum practical interval if you need something more frequent than that, you'd need a long-running pod with an internal loop instead.
+
 ---
 
 ### Part 2 — Knative Eventing: Event-Driven Services

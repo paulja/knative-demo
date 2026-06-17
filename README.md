@@ -10,42 +10,22 @@ Install the following before running the setup script.
 
 ### 1. Kind
 ```bash
-# macOS
 brew install kind
-
-# Linux
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
-chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
 ```
 
 ### 2. kubectl
 ```bash
-# macOS
 brew install kubectl
-
-# Linux
-curl -LO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 ```
 
 ### 3. kn (Knative CLI)
 ```bash
-# macOS
 brew install kn
-
-# Linux — check https://github.com/knative/client/releases for latest
-curl -LO https://github.com/knative/client/releases/latest/download/kn-linux-amd64
-chmod +x kn-linux-amd64 && sudo mv kn-linux-amd64 /usr/local/bin/kn
 ```
 
 ### 4. kn-quickstart plugin
 ```bash
-# macOS
 brew install knative-extensions/kn-plugins/quickstart
-
-# Linux — check https://github.com/knative-extensions/kn-plugin-quickstart/releases
-curl -LO https://github.com/knative-extensions/kn-plugin-quickstart/releases/latest/download/kn-quickstart-linux-amd64
-chmod +x kn-quickstart-linux-amd64 && sudo mv kn-quickstart-linux-amd64 /usr/local/bin/kn-quickstart
 ```
 
 Verify the plugin is visible to `kn`:
@@ -128,7 +108,7 @@ kn service update helloworld-go --traffic helloworld-go-00001=100
 
 **Cron Job Trigger**
 
-Run in this cron task to run every 2 minutes:
+Create a CronJob to call the pod every 2 minutes:
 
 ```bash
 kubectl apply -f - <<EOF
